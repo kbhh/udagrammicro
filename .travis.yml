@@ -1,0 +1,23 @@
+language: node.js
+node_js:
+  - 16
+services:
+  - docker
+install: 
+  - echo "nothing to install"
+before_script: 
+  - echo "notihing..."
+script: 
+   - docker version
+   - docker-compose -f docker-compose-build build --parallel
+   - docker tag udagram-api-feed kibrom/udagram-api-feed:v1
+   - docker tag udagram-api-user kibrom/udagram-api-user:v1
+   - docker tag udagram-frontend:local kibrom/udagram-frontend:v1
+   - docker tag reverseproxy kibrom/reverseproxy:v1
+ 
+after_sucess:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker push kibrom/udagram-api-feed:v1
+  - docker push kibrom/udagram-api-user:v1
+  - docker push kibrom/udagram-frontend:v1
+  - docker push kibrom/reverseproxy:v1  
