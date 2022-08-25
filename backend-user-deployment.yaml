@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: udagram-api-user
+  labels:
+    app: udagram-api-user
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: udagram-api-user
+  template:
+    metadata:
+      labels:
+        app: udagram-api-user
+    spec:
+      containers:
+      - name: udagram-api-user
+        image: kibrom/udagram-api-user:v1
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "1024Mi"
+            cpu: "500m"     
+        ports:
+         - containerPort: 80
+        env: 
+          - name: aws_access_key_id
+            valueFrom:
+              configMapKeyRef: 
+                 name: udagram-aws 
+                 key:  aws_secret_access_key 
+          - name: aws_secret_access_key
+            valueFrom:
+              configMapKeyRef: 
+                 name: udagram-aws 
+                 key:  aws_secret_access_key      
+          - name: POSTGRES_DB
+            valueFrom:
+              configMapKeyRef: 
+                 name: udagram-config
+                 key:  POSTGRES_DB 
+          - name: POSTGRES_HOST
+            valueFrom:
+              configMapKeyRef: 
+                 name: udagram-config
+                 key:  POSTGRES_HOST         
+          - name: AWS_REGION
+            valueFrom:
+              configMapKeyRef: 
+                 name: udagram-config
+                 key:  AWS_REGION
+          - name: AWS_PROFILE
+            valueFrom:
+              configMapKeyRef: 
+                 name: udagram-config
+                 key:  AWS_PROFILE
+          - name: AWS_BUCKET
+            valueFrom:
+              configMapKeyRef: 
+                 name: udagram-config
+                 key:  AWS_BUCKET
+          - name: URL
+            valueFrom:
+              configMapKeyRef: 
+                 name: udagram-config
+                 key:  URL       
+          - name: POSTGRES_USERNAME
+            valueFrom:
+              configMapKeyRef: 
+                 name: udagram-secret
+                 key:  POSTGRES_USERNAME                                                 
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              configMapKeyRef: 
+                 name: udagram-secret
+                 key:  POSTGRES_PASSWORD  
+          - name: JWT_SECRET
+            valueFrom:
+              configMapKeyRef: 
+                 name: udagram-secret
+                 key:  JWT_SECRET   
