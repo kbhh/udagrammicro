@@ -5,7 +5,7 @@ metadata:
   labels:
     app: udagram-frontend
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: udagram-frontend
@@ -16,24 +16,13 @@ spec:
     spec:
       containers:
       - name: udagram-frontend
-        image: kibrom/udagram-frontend:v6
+        image: kibrom/udagram-frontend:v10
+        ports:
+        - containerPort: 80
         resources:
           requests:
             memory: "64Mi"
             cpu: "250m"
           limits:
             memory: "1024Mi"
-            cpu: "500m"     
-        ports:
-        - containerPort: 80
-        env: 
-          - name: aws_access_key_id
-            valueFrom:
-              configMapKeyRef: 
-                 name: udagram-aws 
-                 key:  aws_secret_access_key 
-          - name: aws_secret_access_key
-            valueFrom:
-              configMapKeyRef: 
-                 name: udagram-aws 
-                 key:  aws_secret_access_key    
+            cpu: "500m"

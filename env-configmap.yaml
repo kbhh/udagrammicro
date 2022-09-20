@@ -3,9 +3,9 @@ kind: ConfigMap
 metadata:
   name: udagram-config
 data:
-  POSTGRES_DB: ${POSTGRES_DB}
-  POSTGRES_HOST: ${POSTGRES_HOST}
-  AWS_REGION: ${AWS_REGION}
-  AWS_PROFILE: ${AWS_PROFILE}
-  AWS_BUCKET: ${AWS_BUCKET}
-  URL: "http://localhost:8100" 
+  POSTGRES_DB: "udgramkbdev"
+  POSTGRES_HOST: "udgramkbdev.cgootwveots8.ap-south-1.rds.amazonaws.com"
+  AWS_REGION: "ap-south-1"
+  AWS_PROFILE: "default"
+  AWS_BUCKET: "udgramkbdev"
+  URL: "http://localhost:8100"

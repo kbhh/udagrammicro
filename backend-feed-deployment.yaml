@@ -1,42 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: udagram-api-feed
   labels:
-    app: udagram-api-feed
+    service: udagram-api-feed
+  name: udagram-api-feed  
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: udagram-api-feed
+      service: udagram-api-feed
   template:
     metadata:
       labels:
-        app: udagram-api-feed
+        service: udagram-api-feed
     spec:
       containers:
-      - name: udagram-api-feed
-        image: kibrom/udagram-api-feed:v1
+      - image: kibrom/udagram-api-feed:v10
+        name: udagram-api-feed
+        imagePullPolicy: Always
         resources:
           requests:
             memory: "64Mi"
-            cpu: "250m"
-          limits:
-            memory: "1024Mi"
-            cpu: "500m"     
-        ports:
-        - containerPort: 80
-        env: 
-          - name: aws_access_key_id
-            valueFrom:
-              configMapKeyRef: 
-                 name: udagram-aws 
-                 key:  aws_secret_access_key 
-          - name: aws_secret_access_key
-            valueFrom:
-              configMapKeyRef: 
-                 name: udagram-aws 
-                 key:  aws_secret_access_key      
+            cpu: "250m"    
+        env:
           - name: POSTGRES_DB
             valueFrom:
               configMapKeyRef: 
@@ -66,7 +52,7 @@ spec:
             valueFrom:
               configMapKeyRef: 
                  name: udagram-config
-                 key:  URL       
+                 key:  URL
           - name: POSTGRES_USERNAME
             valueFrom:
               configMapKeyRef: 
@@ -81,5 +67,13 @@ spec:
             valueFrom:
               configMapKeyRef: 
                  name: udagram-secret
-                 key:  JWT_SECRET  
-                                                                
+                 key:  JWT_SECRET
+        volumeMounts:
+          - name: aws-secret
+            mountPath: "/root/.aws/"
+            readOnly: true
+      restartPolicy: Always
+      volumes:
+        - name: aws-secret
+          secret:
+            secretName: aws-secret           

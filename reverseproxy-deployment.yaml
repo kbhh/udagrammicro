@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    service: reverseproxy
   name: reverseproxy
+  labels:
+    app: reverseproxy
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: reverseproxy
@@ -15,27 +15,8 @@ spec:
         app: reverseproxy
     spec:
       containers:
-      - image: kibrom/reverseproxy:v5
-        name: reverseproxy   
-        imagePullPolicy: Always          
-        resources:
-          requests:
-            memory: "64Mi"
-            cpu: "250m"
-          limits:
-            memory: "1024Mi"
-            cpu: "500m"       
+      - name: reverseproxy    
+        image: kibrom/reverseproxy:v10
+        imagePullPolicy: Always    
         ports:
-        - containerPort: 8080
-        env: 
-          - name: aws_access_key_id
-            valueFrom:
-              configMapKeyRef: 
-                 name: udagram-aws 
-                 key:  aws_secret_access_key 
-          - name: aws_secret_access_key
-            valueFrom:
-              configMapKeyRef: 
-                 name: udagram-aws 
-                 key:  aws_secret_access_key   
-      restartPolicy: Always
+          - containerPort: 8080
